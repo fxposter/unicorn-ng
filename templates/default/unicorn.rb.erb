@@ -15,8 +15,8 @@ user <%= @user.inspect %>
 working_directory <%= @working_directory.inspect %>
 <% end -%>
 
-<% if @listen %>
-listen <%= @listen.inspect %> <%= @backlog ? ", :backlog => #{@backlog.inspect}" : '' %>
+<% Array(@listen).each do |path_or_port, options| %>
+listen <%= path_or_port.inspect %>, <%= (options || {}).inspect %>
 <% end -%>
 
 <% if @pid %>

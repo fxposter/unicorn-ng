@@ -41,8 +41,11 @@ This section describes the supported attributes, as well as their default settin
 
 ```ruby
 default['unicorn-ng']['config']['worker_processes'] = 1
-default['unicorn-ng']['config']['listen'] = 8080
-default['unicorn-ng']['config']['backlog'] = nil
+default['unicorn-ng']['config']['listen'] = [
+  8080, # listen on port
+  [8081, { :tcp_nopush => true }], # listen on port with options
+  ['unix:tmp/sockets/unicorn.sock', { :backlog => 1024 }] # listen on Unix socket with backlog
+]
 default['unicorn-ng']['config']['pid'] = 'tmp/pids/unicorn.pid'
 default['unicorn-ng']['config']['timeout'] = 60
 default['unicorn-ng']['config']['stderr_path'] = 'log/unicorn.stderr.log'
@@ -210,8 +213,7 @@ unicorn_ng_config '/var/www/example.com/shared/config/unicorn.rb' do
 
     # Listen on UNIX domain socket only
     # Shorter backlog for quicker failover when busy
-    listen  'unix:tmp/sockets/unicorn.sock'
-    backlog 1024
+    listen [['unix:tmp/sockets/unicorn.sock', { :backlog => 1024 }]]
 
   when 'development'
     listen 8080
