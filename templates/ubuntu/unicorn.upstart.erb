@@ -1,0 +1,17 @@
+description "<%= @service_name %>"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+env BUNDLE_GEMFILE="<%= @bundle_gemfile %>"
+env LANG="<%= @locale %>"
+env LC_ALL="<%= @locale %>"
+env LANGUAGE="<%= @locale %>"
+
+expect daemon
+
+<% if @wrapper %>
+exec start-stop-daemon --start --pidfile <%= @pidfile %> --chuid <%= @user %> --exec <%= @wrapper %> -- <%= @wrapper_opts %> <%= @bundle %> exec unicorn -D -E <%= @environment %> -c <%= @config %>
+<% else %>
+exec start-stop-daemon --start --pidfile <%= @pidfile %> --chuid <%= @user %> --exec <%= @bundle %> -- exec unicorn -D -E <%= @environment %> -c <%= @config %>
+<% end -%>

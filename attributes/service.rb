@@ -40,3 +40,5 @@ default['unicorn-ng']['service']['cookbook'] = 'unicorn-ng'
 default['unicorn-ng']['service']['source'] = 'unicorn.init.erb'
 default['unicorn-ng']['service']['variables'] = {}
 default['unicorn-ng']['service']['name'] = 'unicorn'
+
+default['unicorn-ng']['service']['service_provider'] = nil

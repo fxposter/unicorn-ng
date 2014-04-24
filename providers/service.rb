@@ -19,7 +19,13 @@
 #
 
 action :create do
-  r = template "/etc/init.d/#{new_resource.service_name}" do
+  if new_resource.service_provider == Chef::Provider::Service::Upstart
+    template_path = "/etc/init/#{new_resource.service_name}.conf"
+  else # init
+    template_path = "/etc/init.d/#{new_resource.service_name}"
+  end
+
+  r = template template_path do
     owner new_resource.owner
     group new_resource.group
     mode  new_resource.mode
@@ -51,6 +57,7 @@ action :create do
   new_resource.updated_by_last_action(true) if r.updated_by_last_action?
 
   service new_resource.service_name do
+    provider new_resource.service_provider if new_resource.service_provider
     supports restart: true, status: true, reload: true
     action [:enable, :start]
   end
