@@ -31,7 +31,6 @@ action :create do
                 user: new_resource.user,
                 working_directory: new_resource.working_directory,
                 listen: new_resource.listen,
-                backlog: new_resource.backlog,
                 pid: new_resource.pid,
                 timeout: new_resource.timeout,
                 stderr_path: new_resource.stderr_path,
